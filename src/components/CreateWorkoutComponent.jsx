@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import WorkoutService from '../services/WorkoutService';
+import CommonComponent from './CommonComponent';
 
-class CreateWorkoutComponent extends Component {
+class CreateWorkoutComponent extends CommonComponent {
     constructor(props) {
         super(props)
 
         this.state = {
+            id: this.props.match.params.id,
             distance: '',
             dayDate: '',
             monthDate: '',
@@ -16,22 +18,53 @@ class CreateWorkoutComponent extends Component {
         this.cancel = this.cancel.bind(this);
     }
 
+    componentDidMount() {
+        if (this.state.id == '_add') {
+            return
+        } else {
+            WorkoutService.getWorkoutById(this.state.id).then(res => {
+                let workout = res.data;
+                this.setState({
+                        distance: workout.distance,
+                        dayDate: workout.dayDate,
+                        monthDate: workout.monthDate,
+                        yearDate: workout.yearDate
+                });
+            });
+        }
+    }
+
     changeHandler = (event) => {
         const{name, value} = event.target;
-        this.setState({[name]: value})
+        this.setState({[name]: value});
     }
 
     saveWorkout = e => {
         e.preventDefault();
         let workout = {distance: this.state.distance, dayDate: this.state.dayDate, monthDate: this.state.monthDate, yearDate: this.state.yearDate};
         console.log('workout => ' + JSON.stringify(workout));
-        WorkoutService.createWorkout(workout).then(res => {
-            this.props.history.push('/workouts');
-        })
+
+        if (this.state.id == '_add') {
+            WorkoutService.createWorkout(workout).then(res => {
+                this.props.history.push('/workouts');
+            });
+        } else {
+            WorkoutService.updateWorkout(workout, this.state.id).then(res => {
+                this.props.history.push('/workouts');
+            });
+        }
     }
 
     cancel() {
         this.props.history.push('/workouts');
+    }
+
+    getTitle() {
+        if (this.state.id == '_add') {
+            return "Add Workout"
+        } else {
+            return "Update Workout"
+        }
     }
 
     render() {
@@ -40,7 +73,11 @@ class CreateWorkoutComponent extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="card col-md-6 offset-md-3 offset-md-3">
-                            <h3 className="text-center">Add Workout</h3>
+                            <h3 className="text-center"> 
+                                {
+                                  this.getTitle()
+                                }
+                            </h3>
                             <div className="cardbody">
                                 <form>
                                     <div className="form-group">
