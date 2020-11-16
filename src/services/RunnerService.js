@@ -8,7 +8,7 @@ class RunnerService {
     }
 
     getApiUrl() {
-        return "http://localhost:8080/api/v1/runner";
+        return "http://ec2-54-173-26-187.compute-1.amazonaws.com:8080/api/v1/runner";
     }
 
     checkValidKey() {
