@@ -67,7 +67,7 @@ class CreateWorkoutComponent extends CommonComponent {
     saveWorkout = e => {
         e.preventDefault();
 
-        var letterNumber = /^[0-9a-zA-Z]+$/;
+        var letterNumber = /^[0-9a-zA-Z ]+$/;
         var number = /^[0-9.]+$/;
         if (!this.state.title.valueOf().match(letterNumber)) {
             this.setState({ error: "Please enter a valid title" });
@@ -125,12 +125,12 @@ class CreateWorkoutComponent extends CommonComponent {
                                 <label className="text-danger">{this.state.error}</label>
                                 <div className="control-group">
                                     <div className="form-group">
-                                        <label>Title</label>
+                                        <label>Title:</label>
                                         <input placeholder="Title" name="title" className="form-control"
                                             value={this.state.title} onChange={this.changeHandler} required />
                                     </div>
                                     <div className="form-group">
-                                        <label>Distance</label>
+                                        <label>Distance (km):</label>
                                         <input placeholder="Distance" name="distance" className="form-control"
                                             value={this.state.distance} onChange={this.changeHandler} required />
                                     </div>
