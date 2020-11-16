@@ -135,15 +135,13 @@ class CreateWorkoutComponent extends CommonComponent {
                                             value={this.state.distance} onChange={this.changeHandler} required />
                                     </div>
                                 </div>
-                                <Grid
-                                    container
-                                    spacing={0}
-                                    direction="column"
-                                    alignItems="center"
-                                    justify="center"
-                                >
-                                    <Grid item xs={5}>
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <form style={{
+                                                    margin:"auto",
+                                                    display: "flex",
+                                                    position: "relative",
+                                                    justifyContent: "center"
+                                                }}>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                             <KeyboardDatePicker
                                                 disableToolbar
                                                 format='MM/dd/yyyy'
@@ -152,16 +150,29 @@ class CreateWorkoutComponent extends CommonComponent {
                                                 label="Date picker"
                                                 variant='static'
                                                 value={this.state.selectedDate}
+                                                style={{
+                                                    display: "flex"
+                                                }}
                                                 onChange={this.handleDateChange}
                                                 KeyboardButtonProps={{
                                                     'aria-label': 'change date'
                                                 }}
                                             />
                                         </MuiPickersUtilsProvider>
+                                </form>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="row"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <Grid item xs={0} sm={0} m>
                                     </Grid>
-                                    <Grid item xs={5}>
+                                    <Grid item xs={8} sm={3}>
+                                        
                                     </Grid>
-                                    <Grid item xs={5}>
+                                    <Grid item xs={0} sm={2}>
                                     </Grid>
                                 </Grid>
                                 <div className="form-group">
