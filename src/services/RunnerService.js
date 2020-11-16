@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 class RunnerService {
     loginKey = "";
 
@@ -7,11 +8,15 @@ class RunnerService {
     }
 
     getApiUrl() {
-        return "http://localhost:8080/api/v1/runner/" + this.loginKey;
+        return "http://localhost:8080/api/v1/runner";
     }
 
     checkValidKey() {
-        return axios.get(this.getApiUrl());
+        return axios.get(this.getApiUrl() + "/" + localStorage.getItem("loginKey"));
+    }
+
+    createRunner(runner) {
+        return axios.post(this.getApiUrl(), runner);
     }
 }
 export default new RunnerService();

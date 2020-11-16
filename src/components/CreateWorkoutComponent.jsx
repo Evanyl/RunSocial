@@ -1,6 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import WorkoutService from '../services/WorkoutService';
 import CommonComponent from './CommonComponent';
+
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    KeyboardDatePicker,
+    MuiPickersUtilsProvider
+} from '@material-ui/pickers'
+
+import Grid from '@material-ui/core/Grid';
 
 class CreateWorkoutComponent extends CommonComponent {
     constructor(props) {
@@ -9,50 +18,88 @@ class CreateWorkoutComponent extends CommonComponent {
         this.state = {
             id: this.props.match.params.id,
             distance: '',
-            dayDate: '',
-            monthDate: '',
-            yearDate: ''
+            selectedDate: new Date(),
+            title: "",
+            error: ""
         }
         this.changeHandler = this.changeHandler.bind(this);
         this.saveWorkout = this.saveWorkout.bind(this);
+        this.handleDateChange = this.handleDateChange.bind(this);
         this.cancel = this.cancel.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     componentDidMount() {
-        if (this.state.id == '_add') {
-            return
+        if (this.state.id === '_add') {
+            this.setState({
+                seledtedDate: new Date()
+            })
         } else {
             WorkoutService.getWorkoutById(this.state.id).then(res => {
                 let workout = res.data;
                 this.setState({
-                        distance: workout.distance,
-                        dayDate: workout.dayDate,
-                        monthDate: workout.monthDate,
-                        yearDate: workout.yearDate
+                    distance: workout.distance,
+                    title: workout.title,
+                    selectedDate: new Date(workout.yearDate,
+                        workout.monthDate,
+                        workout.dayDate)
                 });
             });
         }
     }
 
+    handleDateChange(date) {
+        this.setState({ selectedDate: date });
+    }
+
+    delete = e => {
+        e.preventDefault();
+        WorkoutService.deleteWorkout(this.state.id).then(res => {
+            this.props.history.push("/workouts");
+        });
+    }
+
     changeHandler = (event) => {
-        const{name, value} = event.target;
-        this.setState({[name]: value});
+        const { name, value } = event.target;
+        this.setState({ [name]: value });
     }
 
     saveWorkout = e => {
         e.preventDefault();
-        let workout = {distance: this.state.distance, dayDate: this.state.dayDate, monthDate: this.state.monthDate, yearDate: this.state.yearDate};
-        console.log('workout => ' + JSON.stringify(workout));
 
-        if (this.state.id == '_add') {
-            WorkoutService.createWorkout(workout).then(res => {
-                this.props.history.push('/workouts');
-            });
-        } else {
-            WorkoutService.updateWorkout(workout, this.state.id).then(res => {
-                this.props.history.push('/workouts');
-            });
+        var letterNumber = /^[0-9a-zA-Z]+$/;
+        var number = /^[0-9.]+$/;
+        if (!this.state.title.valueOf().match(letterNumber)) {
+            this.setState({ error: "Please enter a valid title" });
+            return;
         }
+
+        if (!this.state.distance.toString().match(number)) {
+            this.setState({ error: "Please enter a distance!" });
+            return;
+        }
+
+        if (this.state.selectedDate <= new Date()) {
+            let workout = {
+                distance: this.state.distance,
+                dayDate: this.state.selectedDate.getDate(),
+                monthDate: this.state.selectedDate.getMonth(),
+                yearDate: this.state.selectedDate.getFullYear(),
+                title: this.state.title
+            };
+            if (this.state.id === '_add') {
+                WorkoutService.createWorkout(workout).then(res => {
+                    this.props.history.push('/workouts');
+                });
+            } else {
+                WorkoutService.updateWorkout(workout, this.state.id).then(res => {
+                    this.props.history.push('/workouts');
+                });
+            }
+        } else {
+            this.setState({ error: "That is in the future!" });
+        }
+
     }
 
     cancel() {
@@ -60,7 +107,7 @@ class CreateWorkoutComponent extends CommonComponent {
     }
 
     getTitle() {
-        if (this.state.id == '_add') {
+        if (this.state.id === '_add') {
             return "Add Workout"
         } else {
             return "Update Workout"
@@ -69,47 +116,67 @@ class CreateWorkoutComponent extends CommonComponent {
 
     render() {
         return (
-            <div>
+            <section className="page-section portfolio" id="portfolio">
                 <div className="container">
+                    <h2 className="page-section-heading text-center text-uppercase text-secondary mb-0" style={{ marginTop: '10px' }}>{this.getTitle()}</h2>
                     <div className="row">
-                        <div className="card col-md-6 offset-md-3 offset-md-3">
-                            <h3 className="text-center"> 
-                                {
-                                  this.getTitle()
-                                }
-                            </h3>
-                            <div className="cardbody">
-                                <form>
+                        <div className="col-lg-8 mx-auto">
+                            <form>
+                                <label className="text-danger">{this.state.error}</label>
+                                <div className="control-group">
+                                    <div className="form-group">
+                                        <label>Title</label>
+                                        <input placeholder="Title" name="title" className="form-control"
+                                            value={this.state.title} onChange={this.changeHandler} required />
+                                    </div>
                                     <div className="form-group">
                                         <label>Distance</label>
-                                        <input placeholder="Distance" name="distance" className="form-control" 
-                                        value={this.state.distance} onChange={this.changeHandler} />
+                                        <input placeholder="Distance" name="distance" className="form-control"
+                                            value={this.state.distance} onChange={this.changeHandler} required />
                                     </div>
-                                    <div className="form-group">
-                                        <label>Day</label>
-                                        <input placeholder="Day" name="dayDate" className="form-control" 
-                                        value={this.state.dayDate} onChange={this.changeHandler} />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Month</label>
-                                        <input placeholder="Month" name="monthDate" className="form-control" 
-                                        value={this.state.monthDate} onChange={this.changeHandler} />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Year</label>
-                                        <input placeholder="Year" name="yearDate" className="form-control" 
-                                        value={this.state.yearDate} onChange={this.changeHandler} />
-                                    </div>
-
+                                </div>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <Grid item xs={5}>
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <KeyboardDatePicker
+                                                disableToolbar
+                                                format='MM/dd/yyyy'
+                                                margin='normal'
+                                                id='date-picker'
+                                                label="Date picker"
+                                                variant='static'
+                                                value={this.state.selectedDate}
+                                                onChange={this.handleDateChange}
+                                                KeyboardButtonProps={{
+                                                    'aria-label': 'change date'
+                                                }}
+                                            />
+                                        </MuiPickersUtilsProvider>
+                                    </Grid>
+                                    <Grid item xs={5}>
+                                    </Grid>
+                                    <Grid item xs={5}>
+                                    </Grid>
+                                </Grid>
+                                <div className="form-group">
                                     <button className="btn btn-success" onClick={this.saveWorkout}>Save</button>
-                                    <button className="btn btn-danger" onClick={this.cancel} style={{marignLeft: "10px"}}>Cancel</button>
-                                </form>
-                            </div>
+                                    <button className="btn btn-danger" onClick={this.cancel} style={{ marignLeft: "10px" }}>Cancel</button>
+                                    {(this.state.id !== "_add") &&
+                                        <button className="btn btn-danger float-right" onClick={this.delete}>Delete</button>
+                                    }
 
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         );
     }
 }

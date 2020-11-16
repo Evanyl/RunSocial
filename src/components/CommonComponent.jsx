@@ -1,12 +1,22 @@
 import React, { Component } from 'react';
-import WorkoutService from '../services/WorkoutService';
-import RunnerService from '../services/RunnerService';
-import Housekeeping from '../services/Housekeeping';
 
 class CommonComponent extends Component {
     constructor(props) {
-        super(props)
+        super(props);
 
+        this.state = {};
+        if (!localStorage.getItem("loginKey")) {
+            this.props.history.push("/");
+        }
+    }
+
+    render() {
+        return (
+            <div>
+
+            </div>
+        )
     }
 }
+
 export default CommonComponent;

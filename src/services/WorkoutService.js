@@ -8,14 +8,14 @@ class WorkoutService {
     }
 
     checkEmpty() {
-        if (this.loginKey == "") {
+        if (localStorage.getItem("loginKey") === "") {
             return true;
         }
         return false;
     }
 
     getApiUrl() {
-        return "http://localhost:8080/api/v1/" + this.loginKey + "/workouts"
+        return "http://localhost:8080/api/v1/" + localStorage.getItem("loginKey") + "/workouts"
     }
 
     getWorkouts() {

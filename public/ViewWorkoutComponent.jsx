@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import WorkoutService from '../services/WorkoutService';
+import CommonComponent from './CommonComponent';
 
-class ViewWorkoutComponent extends Component {
+
+class ViewWorkoutComponent extends CommonComponent {
     constructor(props) {
         super(props)
 
@@ -19,7 +21,9 @@ class ViewWorkoutComponent extends Component {
 
     componentDidMount() {
         WorkoutService.getWorkoutById(this.state.id).then( res => {
-            this.setState({workout: res.data});
+            this.setState({
+                workout: res.data
+            });
         })
     }
 
@@ -33,16 +37,11 @@ class ViewWorkoutComponent extends Component {
                             <button className="btn btn-primary" onClick={this.back}>Back</button>
                         </div>
                         <div className="row">
-                            <label>Distance:</label>
-                            <div>{this.state.workout.distance} </div>
+                            
                         </div>
                         <div className="row">
                             <label>Date:</label>
                             <div>{this.state.workout.dayDate}/{this.state.workout.monthDate}/{this.state.workout.yearDate} </div>
-                        </div>
-                        <div className="row">
-                            <label>Runner Id:</label>
-                            <div>{this.state.workout.runnerId} </div>
                         </div>
                     </div>
                 </div>
