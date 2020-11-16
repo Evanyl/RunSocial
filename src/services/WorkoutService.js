@@ -16,7 +16,7 @@ class WorkoutService {
     }
 
     getApiUrl() {
-        return "https://ec2-54-173-26-187.compute-1.amazonaws.com:443/api/v1/" + localStorage.getItem("loginKey") + "/workouts"
+        return "https://runsocial.xyz/api/v1/" + localStorage.getItem("loginKey") + "/workouts"
     }
 
     getWorkouts() {

@@ -4,7 +4,7 @@ import https from 'https';
 class RunnerService {
 
     getApiUrl() {
-        return "https://ec2-54-173-26-187.compute-1.amazonaws.com/api/v1/runner";
+        return "https://runsocial.xyz/api/v1/runner";
     }
 
     agent() {
