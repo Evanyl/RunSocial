@@ -49,7 +49,7 @@ class RegisterComponent extends Component {
                         <div className="divider-custom divider-light">
                             <div className="divider-custom-line"></div>
                         </div>
-                        <p className="masthead-subheading font-weight-light mb-0">Run Social is a hassle-free way to log your workout data. Quick registration, and easy interface gets you to tracking your progress right away!</p>
+                        <p className="masthead-subheading font-weight-light mb-0">Run Social is a hassle-free way to log your workout data. Quick registration, and an easy interface gets you to tracking your progress right away!</p>
                     </div>
                 </header>
 
