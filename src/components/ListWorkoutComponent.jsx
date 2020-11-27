@@ -20,8 +20,7 @@ class ListWorkoutComponent extends CommonComponent {
     }
 
     getUsername() {
-        let key = localStorage.getItem("loginKey");
-        return "Welcome " + RunnerService.returnUsername(key) + "!";
+
     }
 
     viewWorkout(id) {
@@ -33,6 +32,11 @@ class ListWorkoutComponent extends CommonComponent {
     }
 
     componentDidMount() {
+        let key = localStorage.getItem("loginKey");
+
+        RunnerService.returnUsername(key).then(res => {
+            this.setState({username: res.data});
+        });
         WorkoutService.getWorkouts().then((res) => {
             this.setState({ workouts: res.data });
         });
@@ -50,7 +54,7 @@ class ListWorkoutComponent extends CommonComponent {
         return (
             <section className="page-section portfolio" id="portfolio" >
                 <div className="container" >
-                    <h2 className="text-center">{this.getUsername()}</h2>
+                    <h2 className="text-center">Welcome {this.state.username}!</h2>
                     <div className="row">
                         <button
                             className="btn btn-primary"
