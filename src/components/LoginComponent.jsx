@@ -11,7 +11,7 @@ class LoginComponent extends CommonComponent {
     componentDidMount() {
         RunnerService.checkValidKey().then(res => {
             if (res.data.success === true) {
-                this.props.history.push("/workouts");
+                this.props.history.push("/workouts/_workouts");
             } else {
                 localStorage.setItem("loginKey", null);
                 alert("User not found!");

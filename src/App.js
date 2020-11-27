@@ -7,6 +7,9 @@ import LandingComponent from './components/LandingComponent';
 import LoginComponent from './components/LoginComponent';
 import RegisterComponent from './components/RegisterComponent';
 import Header from './components/Header';
+import GroupComponent from './components/GroupComponent';
+import CreateGroupComponent from './components/CreateGroupComponent';
+import JoinGroupComponent from './components/JoinGroupComponent';
 
 function App() {
 
@@ -18,8 +21,11 @@ function App() {
           <Route path="/" exact component={LandingComponent}></Route>
           <Route path="/login" component={LoginComponent}></Route>
           <Route path="/register" component={RegisterComponent}></Route>
-          <Route path="/workouts" component={ListWorkoutComponent}></Route>
+          <Route path="/workouts/:id" component={ListWorkoutComponent}></Route>
           <Route path="/add-workout/:id" component={CreateWorkoutComponent}></Route>
+          <Route path="/groups/:id" component={GroupComponent}></Route>
+          <Route path="/newGroup" component={CreateGroupComponent}></Route>
+          <Route path="/joinGroup" component={JoinGroupComponent}></Route>
         </Switch>
       </div>
     </Router>

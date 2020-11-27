@@ -55,7 +55,7 @@ class CreateWorkoutComponent extends CommonComponent {
     delete = e => {
         e.preventDefault();
         WorkoutService.deleteWorkout(this.state.id).then(res => {
-            this.props.history.push("/workouts");
+            this.props.history.push("/workouts/_workouts");
         });
     }
 
@@ -89,11 +89,11 @@ class CreateWorkoutComponent extends CommonComponent {
             };
             if (this.state.id === '_add') {
                 WorkoutService.createWorkout(workout).then(res => {
-                    this.props.history.push('/workouts');
+                    this.props.history.push('/workouts/_workouts');
                 });
             } else {
                 WorkoutService.updateWorkout(workout, this.state.id).then(res => {
-                    this.props.history.push('/workouts');
+                    this.props.history.push('/workouts/_workouts');
                 });
             }
         } else {
@@ -103,7 +103,7 @@ class CreateWorkoutComponent extends CommonComponent {
     }
 
     cancel() {
-        this.props.history.push('/workouts');
+        this.props.history.push('/workouts/_workouts');
     }
 
     getTitle() {

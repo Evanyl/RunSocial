@@ -29,7 +29,7 @@ class RegisterComponent extends Component {
             }
             RunnerService.createRunner(runner).then(res => {
                 localStorage.setItem("loginKey", this.state.key);
-                this.props.history.push("/workouts");
+                this.props.history.push("/workouts_workouts");
             }).catch(e => {
                 alert(e);
             });

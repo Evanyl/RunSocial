@@ -16,11 +16,16 @@ class WorkoutService {
     }
 
     getApiUrl() {
-        return "https://runsocial.xyz/api/v1/" + localStorage.getItem("loginKey") + "/workouts"
+        return "https://runsocial.xyz/api/v1/" + localStorage.getItem("loginKey") + "/workouts";
     }
 
     getWorkouts() {
         return axios.get(this.getApiUrl(), {httpsAgent: this.agent()});
+    }
+
+    getOtherWorkouts(id) {
+        let url = "https://runsocial.xyz/api/v1/" + id + "/workouts";
+        return axios.get(url);
     }
 
     createWorkout(workout) {
@@ -38,6 +43,7 @@ class WorkoutService {
     deleteWorkout(id) {
         return axios.delete(this.getApiUrl() + '/' + id, { httpsAgent: this.agent() });
     }
+
 }
 
 export default new WorkoutService();
