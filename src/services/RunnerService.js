@@ -14,7 +14,7 @@ class RunnerService {
     }
 
     returnUsername(key) {
-        return axios.get(this.getApiUrl() + "/get/" + "key");
+        return axios.get(this.getApiUrl() + "/get/" + key);
     }
 
     checkValidKey() {
