@@ -1,4 +1,5 @@
 import React from 'react';
+import RunnerService from '../services/RunnerService';
 import WorkoutService from '../services/WorkoutService';
 import CommonComponent from './CommonComponent';
 
@@ -8,12 +9,19 @@ class ListWorkoutComponent extends CommonComponent {
 
         this.state = {
             workouts: [],
-            months: []
+            months: [],
+            username: "",
         }
 
         this.addWorkout = this.addWorkout.bind(this);
         this.editWorkout = this.editWorkout.bind(this);
         this.viewWorkout = this.viewWorkout.bind(this);
+        this.getUsername = this.getUsername.bind(this);
+    }
+
+    getUsername() {
+        let key = localStorage.getItem("loginKey");
+        return "Welcome " + RunnerService.returnUsername(key) + "!";
     }
 
     viewWorkout(id) {
@@ -42,7 +50,7 @@ class ListWorkoutComponent extends CommonComponent {
         return (
             <section className="page-section portfolio" id="portfolio" >
                 <div className="container" >
-                    <h2 className="text-center">Workouts</h2>
+                    <h2 className="text-center">{this.getUsername()}</h2>
                     <div className="row">
                         <button
                             className="btn btn-primary"

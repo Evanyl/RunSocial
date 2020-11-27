@@ -13,6 +13,10 @@ class RunnerService {
           });
     }
 
+    returnUsername(key) {
+        return axios.get(this.getApiUrl() + "/get/" + "key");
+    }
+
     checkValidKey() {
         return axios.get(this.getApiUrl() + "/" + localStorage.getItem("loginKey"), { httpsAgent: this.agent() });
     }
