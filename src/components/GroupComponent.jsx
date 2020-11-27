@@ -38,12 +38,12 @@ class GroupComponent extends Component {
         newGroup.weeklyDistance = parseFloat(this.state.distance).toFixed(2);
         GroupService.updateGroup(newGroup).then(res => {
             this.props.history.push("/groups/" + this.state.id);
-            this.setState({edit: false});
+            this.setState({ edit: false });
         });
     }
 
     editGroup() {
-        this.setState({edit: true});
+        this.setState({ edit: true });
     }
 
     changeHandler = (event) => {
@@ -63,7 +63,7 @@ class GroupComponent extends Component {
 
         GroupService.getGroup(this.state.id).then(res => {
             this.setState({ group: res.data });
-            this.setState({distance: res.data.weeklyDistance});
+            this.setState({ distance: res.data.weeklyDistance });
         });
         LinkerService.groupsById(this.state.id).then(res => {
             this.setState({ groupLinks: res.data })
@@ -71,11 +71,18 @@ class GroupComponent extends Component {
                 RunnerService.returnUsername(link.runnerUsername).then(res1 => {
                     let newMemberNames = this.state.memberNames;
                     newMemberNames[link.runnerUsername] = res1.data;
-                    this.setState({memberNames: newMemberNames})
+                    this.setState({ memberNames: newMemberNames })
                 })
             })
             res.data.map(link => {
                 WorkoutService.getOtherWorkouts(link.runnerUsername).then(res1 => {
+                    let newMemberDistance = this.state.memberWeeklyDistance;
+                    let previousDistance = newMemberDistance[link.runnerUsername]
+                    if (newMemberDistance[link.runnerUsername] == undefined) {
+                        previousDistance = 0;
+                    }
+                    newMemberDistance[link.runnerUsername] = previousDistance;
+                    this.setState({ memberWeeklyDistance: newMemberDistance });
                     res1.data.map(workout => {
                         let date = new Date(workout.yearDate, workout.monthDate, workout.dayDate);
                         date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
@@ -113,19 +120,19 @@ class GroupComponent extends Component {
         let form;
         if (this.state.edit) {
             form = <div className="control-group">
-            <div className="form-group">
-                <label>Weekly Distance (km):</label>
-                <input placeholder="Distance" name="distance" className="form-control"
-                    value={this.state.distance} onChange={this.changeHandler} required />
+                <div className="form-group">
+                    <label>Weekly Distance (km):</label>
+                    <input placeholder="Distance" name="distance" className="form-control"
+                        value={this.state.distance} onChange={this.changeHandler} required />
+                </div>
             </div>
-        </div>
 
-        button = <button className="btn btn-success" onClick={this.saveGroup}>Save</button>
+            button = <button className="btn btn-success" onClick={this.saveGroup}>Save</button>
         } else {
             button = <button className="btn btn-primary" onClick={this.editGroup}>Edit</button>
         }
 
-        
+
         return (
             <section className="page-section portfolio" id="portfolio">
                 <div className="container">
@@ -139,7 +146,7 @@ class GroupComponent extends Component {
                         </div>
                     </section>
                     <div className="col-lg-8 mx-auto">
-                    <label className="text-danger">{this.state.error}</label>
+                        <label className="text-danger">{this.state.error}</label>
                         {form}
                         {button}
                         <button className="btn btn-secondary float-right" onClick={this.cancel} style={{ marignLeft: "10px" }}>Back</button>
@@ -147,7 +154,7 @@ class GroupComponent extends Component {
                     <div className="row">
                         <div className="col-lg-8 mx-auto">
                             <form>
-        <h3 className=" text-center text-secondary mb-0" style={{ marginTop: '15px' }}>Invite ID: {this.state.group.id}</h3>
+                                <h3 className=" text-center text-secondary mb-0" style={{ marginTop: '15px' }}>Invite ID: {this.state.group.id}</h3>
                                 <div className="list-group overflow-auto">
                                     {
                                         this.state.groupLinks

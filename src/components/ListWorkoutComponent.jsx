@@ -195,7 +195,7 @@ class ListWorkoutComponent extends CommonComponent {
                                         <div className="d-flex w-100 justify-content-between">
                                             <h5 className="mb-1">{group.name}</h5>
                                             <small>
-                                                {this.state.weekDistance}/{group.weeklyDistance}km
+                                                {this.state.weekDistance.toFixed(2)}/{group.weeklyDistance.toFixed(2)}km
                                             </small>
                                         </div>
                                     </a>
